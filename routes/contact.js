@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const contactList = require("./../models/contact");
+const path=require("path");
 
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
         const newContact = new contactList(data);
         const response = await newContact.save(); 
-        res.status(200).json(response);
+        res.status(200).json(response)
     } catch (error) {
         res.status(500).json({ message: "Error saving contact", error });
     }
@@ -17,11 +18,10 @@ router.get('/',async(req,res)=>{
     try {
         const data=await contactList.find();
         console.log("data fetched")
-        res.status(200).json(data);
-
+        res.status(200).render('index',{contacts:data})
     } catch (error) {
         console.log(error);
-        res.status(400).json({msg:"Internal server error"})
+        res.status(400).json({msg:"Intrenal server error"})
     }
 })
 router.put('/:id',async(req,res)=>{

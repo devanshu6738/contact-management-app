@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact App</title>
+    <title>Contact List</title>
+    
 </head>
 <body>
-    <h1>Contact Management System</h1>
+    <h1>All Contacts</h1>
+    <a href="/contact/new">Add New Contact</a>
+    
     <ul>
-        <% contacts.forEach(contact => { %>
+        <% contacts.forEach(function(contact) { %>
             <li>
-                <strong>Name:</strong> <%= contact.name %><br>
-                <strong>Email:</strong> <%= contact.email %><br>
-                <strong>Phone:</strong> <%= contact.phone %>
+                <strong><%= contact.name %></strong> - <%= contact.phone %> - <%= contact.email %>
+                <a href="/contact/<%= contact._id %>/edit">Edit</a>
+                <form action="/contact/<%= contact._id %>?_method=DELETE" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
             </li>
-        <% }); %>
+        <% }) %>
     </ul>
 </body>
 </html>

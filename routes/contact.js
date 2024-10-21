@@ -7,18 +7,21 @@ router.post('/', async (req, res) => {
     try {
         const data = req.body;
         const newContact = new contactList(data);
-        const response = await newContact.save(); 
-        res.status(200).json(response)
+        await newContact.save(); 
+        res.redirect('/contact'); 
     } catch (error) {
         res.status(500).json({ message: "Error saving contact", error });
     }
 });
 
+router.get('/new', (req, res) => {
+    res.render('createContact'); 
+});
 router.get('/',async(req,res)=>{
     try {
         const data=await contactList.find();
         console.log("data fetched")
-        res.status(200).render('index',{contacts:data})
+        res.status(200).render('index', { contacts: data });
     } catch (error) {
         console.log(error);
         res.status(400).json({msg:"Intrenal server error"})
@@ -52,4 +55,20 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const contactId = req.params.id; 
+        const contact = await contactList.findById(contactId); 
+        
+        if (!contact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        res.render('editContact', { contact });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 module.exports = router;
